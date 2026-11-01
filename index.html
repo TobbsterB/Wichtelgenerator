@@ -3,719 +3,603 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Festlicher Wichtel-Generator 🎅🎄</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Mountains of Christmas & Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        xmas: {
-                            red: '#C0392B',
-                            darkred: '#962D22',
-                            green: '#1E8449',
-                            darkgreen: '#145A32',
-                            gold: '#F1C40F',
-                            darkgold: '#D4AC0D',
-                            cream: '#FDEDEC',
-                            bg: '#0B192C'
-                        }
-                    },
-                    fontFamily: {
-                        festive: ['"Mountains of Christmas"', 'cursive'],
-                        sans: ['Inter', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
+    <title>Festlicher Wichtel-Generator 🎄</title>
     <style>
+        :root {
+            --primary-red: #c0392b;
+            --accent-gold: #f39c12;
+            --dark-green: #1e392a;
+            --light-cream: #fbf8f3;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         body {
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            background-color: var(--dark-green);
+            background-image: radial-gradient(#2a4e3a 1px, transparent 0);
+            background-size: 24px 24px;
+            color: var(--text-main);
             min-height: 100vh;
-            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 10px;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* Schneefall Animation */
-        #snow-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-
+        /* Schneefall Effect */
         .snowflake {
-            position: absolute;
+            position: fixed;
             top: -10px;
-            color: #fff;
-            user-select: none;
-            animation-name: fall, shake;
-            animation-duration: 10s, 3s;
-            animation-timing-function: linear, ease-in-out;
-            animation-iteration-count: infinite, infinite;
+            color: white;
+            font-size: 1rem;
             opacity: 0.8;
+            pointer-events: none;
+            user-select: none;
+            animation: fall linear infinite;
+            z-index: 1000;
         }
 
         @keyframes fall {
-            0% { top: -10%; }
-            100% { top: 100%; }
+            to {
+                transform: translateY(105vh) rotate(360deg);
+            }
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(20px); }
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--light-cream);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border: 3px solid var(--accent-gold);
+            padding: 25px;
+            position: relative;
+            z-index: 10;
         }
 
-        /* Flip-Karten Effekt */
-        .perspective-1000 {
-            perspective: 1000px;
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px dashed #dcd6cd;
+            padding-bottom: 15px;
         }
 
-        .card-inner {
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d;
+        header h1 {
+            color: var(--primary-red);
+            font-size: 2rem;
+            margin-bottom: 5px;
         }
 
-        .card-inner.flipped {
-            transform: rotateY(180deg);
+        header p {
+            color: #666;
+            font-size: 0.95rem;
         }
 
-        .card-front, .card-back {
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
+        .section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid #eae2d6;
         }
 
-        .card-back {
-            transform: rotateY(180deg);
+        .section h2 {
+            color: var(--dark-green);
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* Glow animation */
-        .gold-glow {
-            box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            border-color: var(--accent-gold);
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-add {
+            background: var(--dark-green);
+            color: white;
+            padding: 10px 18px;
+            white-space: nowrap;
+        }
+
+        .btn-add:hover {
+            background: #284c38;
+        }
+
+        .btn-primary {
+            background: var(--primary-red);
+            color: white;
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #a93226;
+            transform: translateY(-1px);
+        }
+
+        .btn-share {
+            background: var(--accent-gold);
+            color: white;
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-share:hover {
+            background: #d68910;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: #eef5f0;
+            border: 1px solid #c2e0c8;
+            color: var(--dark-green);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag .remove-btn {
+            color: var(--primary-red);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .rule-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .exclusion-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        /* Result Section / Secret Mode */
+        .reveal-box {
+            text-align: center;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            border: 2px dashed var(--accent-gold);
+        }
+
+        .gift-card {
+            background: linear-gradient(135deg, var(--primary-red), #922b21);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 15px 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.3s;
+        }
+
+        .gift-card:hover {
+            transform: scale(1.02);
+        }
+
+        .gift-card.revealed {
+            background: linear-gradient(135deg, var(--dark-green), #14261c);
+        }
+
+        .gift-target {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--accent-gold);
+            margin-top: 8px;
+        }
+
+        .banner-shared {
+            background: #e8f8f5;
+            border: 1px solid #a3e4d7;
+            color: #117a65;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 480px) {
+            .rule-inputs {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
-<body class="font-sans pb-12 relative">
+<body>
 
-    <!-- Schneefall Container -->
-    <div id="snow-container"></div>
+    <!-- Schneefall Hintergrund -->
+    <div id="snow"></div>
 
-    <!-- Haupt-Content -->
-    <div class="relative z-10 max-w-4xl mx-auto px-4 py-8">
-        
-        <!-- Header -->
-        <header class="text-center mb-8">
-            <div class="inline-block p-3 rounded-full bg-xmas-red/20 border border-xmas-gold/40 mb-3 gold-glow">
-                <i class="fa-solid fa-gift text-4xl text-xmas-gold animate-bounce"></i>
-            </div>
-            <h1 class="text-4xl sm:text-6xl font-festive text-xmas-gold tracking-wide drop-shadow-lg">
-                Weihnachts-Wichteln
-            </h1>
-            <p class="text-slate-300 text-sm sm:text-base mt-2 font-light">
-                Organisiere deine Wichtelrunde schnell, fair & geheim! 🎄🎁
-            </p>
+    <div class="container">
+        <header>
+            <h1>🎄 Wichtel-Generator 🎁</h1>
+            <p>Zufälliges Wichteln – einfach & fair verlinken!</p>
         </header>
 
-        <!-- Tab Navigation -->
-        <div class="flex flex-wrap justify-center gap-2 mb-8 bg-slate-900/60 p-1.5 rounded-2xl backdrop-blur-md border border-slate-700/50">
-            <button onclick="switchTab('tab-setup')" id="nav-tab-setup" class="tab-btn px-5 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center gap-2 bg-xmas-red text-white shadow-md">
-                <i class="fa-solid fa-users-gear"></i> 1. Teilnehmende & Regeln
-            </button>
-            <button onclick="switchTab('tab-draw')" id="nav-tab-draw" class="tab-btn px-5 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> 2. Auslosung
-            </button>
-            <button onclick="switchTab('tab-reveal')" id="nav-tab-reveal" class="tab-btn px-5 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800">
-                <i class="fa-solid fa-envelope-open-text"></i> 3. Ziehung Aufdecken
-            </button>
-        </div>
+        <!-- VIEW 1: ADMIN (Erstellen & Auslosen) -->
+        <div id="adminView">
+            <!-- 1. Teilnehmer hinzufügen -->
+            <div class="section">
+                <h2>👤 1. Teilnehmende Personen</h2>
+                <div class="input-group">
+                    <input type="text" id="nameInput" placeholder="Name eingeben..." onkeypress="handleKeyPress(event)">
+                    <button class="btn-add" onclick="addParticipant()">Hinzufügen</button>
+                </div>
+                <div class="tag-container" id="participantTags"></div>
+            </div>
 
-        <!-- TAB 1: TEILNEHMENDE & REGELN -->
-        <div id="tab-setup" class="tab-content space-y-6">
-            
-            <!-- Richtlinien & Motto -->
-            <div class="bg-slate-900/70 border border-slate-700/60 rounded-2xl p-6 backdrop-blur-md shadow-xl">
-                <h2 class="text-xl font-semibold text-xmas-gold mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-sliders"></i> Wichtel-Richtlinien & Motto
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- 2. Ausschlussregeln (Optional) -->
+            <div class="section">
+                <h2>🚫 2. Ausschlüsse (optional)</h2>
+                <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">Wer darf wen NICHT ziehen? (z.B. Partner)</p>
+                <div id="exclusionList"></div>
+                <button class="btn-add" style="background:#7f8c8d; font-size: 0.85rem;" onclick="addExclusionRow()">+ Ausschluss hinzufügen</button>
+            </div>
+
+            <!-- 3. Wichtel-Regeln -->
+            <div class="section">
+                <h2>📜 3. Regeln & Details</h2>
+                <div class="rule-inputs">
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Maximales Budget</label>
-                        <div class="relative">
-                            <input type="text" id="rule-budget" placeholder="z.B. 15 €" value="15 €" class="w-full bg-slate-800 border border-slate-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-xmas-gold transition">
-                            <i class="fa-solid fa-euro-sign absolute right-3 top-3 text-slate-400 text-xs"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Auslosungs- / Übergabedatum</label>
-                        <div class="relative">
-                            <input type="text" id="rule-date" placeholder="z.B. 24. Dezember" value="24. Dezember" class="w-full bg-slate-800 border border-slate-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-xmas-gold transition">
-                            <i class="fa-solid fa-calendar-day absolute right-3 top-3 text-slate-400 text-xs"></i>
-                        </div>
+                        <label style="font-size:0.8rem; color:#555;">Max. Budget (€)</label>
+                        <input type="number" id="budgetInput" placeholder="z. B. 15">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Geschenke-Motto (optional)</label>
-                        <div class="relative">
-                            <input type="text" id="rule-motto" placeholder="z.B. Selbstgemacht / Schrottwichteln" value="Selbstgemacht oder Lustig" class="w-full bg-slate-800 border border-slate-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-xmas-gold transition">
-                            <i class="fa-solid fa-lightbulb absolute right-3 top-3 text-slate-400 text-xs"></i>
-                        </div>
+                        <label style="font-size:0.8rem; color:#555;">Motto / Thema</label>
+                        <input type="text" id="mottoInput" placeholder="z. B. Lustig, Selbstgemacht">
                     </div>
                 </div>
             </div>
 
-            <!-- Person Hinzufügen -->
-            <div class="bg-slate-900/70 border border-slate-700/60 rounded-2xl p-6 backdrop-blur-md shadow-xl">
-                <h2 class="text-xl font-semibold text-xmas-gold mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-user-plus"></i> Teilnehmende hinzufügen
-                </h2>
-                <form id="add-person-form" class="flex flex-col sm:flex-row gap-3">
-                    <input type="text" id="person-name" placeholder="Name der Person eingeben..." class="flex-1 bg-slate-800 border border-slate-600 rounded-xl px-4 py-2.5 text-white placeholder-slate-400 focus:outline-none focus:border-xmas-gold transition">
-                    <button type="submit" class="bg-xmas-green hover:bg-xmas-darkgreen text-white font-medium px-6 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg">
-                        <i class="fa-solid fa-plus"></i> Hinzufügen
-                    </button>
-                </form>
-            </div>
-
-            <!-- Liste der Teilnehmenden & Ausschlüsse -->
-            <div class="bg-slate-900/70 border border-slate-700/60 rounded-2xl p-6 backdrop-blur-md shadow-xl">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold text-xmas-gold flex items-center gap-2">
-                        <i class="fa-solid fa-users"></i> Liste & Ausschlüsse
-                    </h2>
-                    <span id="participant-count" class="bg-slate-800 text-xmas-gold text-xs px-3 py-1 rounded-full border border-xmas-gold/30">0 Personen</span>
-                </div>
-
-                <div id="participants-list" class="space-y-4">
-                    <!-- Dynamic participants will appear here -->
-                </div>
-
-                <div id="empty-state" class="text-center py-8 text-slate-400">
-                    <i class="fa-solid fa-user-slash text-4xl mb-2 text-slate-600"></i>
-                    <p class="text-sm">Noch keine Teilnehmenden hinzugefügt. Trage oben mindestens 3 Personen ein!</p>
-                </div>
-            </div>
-
-            <div class="flex justify-end">
-                <button onclick="switchTab('tab-draw')" class="bg-xmas-red hover:bg-xmas-darkred text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 transition shadow-lg">
-                    Weiter zur Auslosung <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </div>
+            <button class="btn-primary" onclick="generateDraw()">🎲 Auslosung durchführen & Link generieren</button>
         </div>
 
-        <!-- TAB 2: AUSLOSUNG -->
-        <div id="tab-draw" class="tab-content hidden space-y-6">
-            <div class="bg-slate-900/70 border border-slate-700/60 rounded-2xl p-6 backdrop-blur-md shadow-xl text-center">
-                <h2 class="text-2xl font-festive text-xmas-gold mb-2">Bereit für den Wichtelzauber?</h2>
-                <p class="text-slate-300 text-sm max-w-xl mx-auto mb-6">
-                    Der Algorithmus weist jedem Teilnehmenden zufällig eine Person zu. Eingegebene Ausschlüsse werden absolut vertraulich berücksichtigt!
-                </p>
-
-                <!-- Status-Benachrichtigung -->
-                <div id="draw-status-message" class="hidden mb-6 p-4 rounded-xl text-sm font-medium"></div>
-
-                <button id="btn-run-draw" onclick="runDraw()" class="bg-gradient-to-r from-xmas-red to-xmas-gold hover:opacity-90 text-slate-950 font-bold px-8 py-4 rounded-2xl text-lg transition transform active:scale-95 shadow-2xl inline-flex items-center gap-3">
-                    <i class="fa-solid fa-dice text-xl"></i> jetzt Wichtel auslosen!
-                </button>
+        <!-- VIEW 2: SHARE & RESULT (Wird nach Auslosung oder via Link angezeigt) -->
+        <div id="shareView" class="hidden">
+            <div id="sharedBanner" class="banner-shared hidden">
+                ✨ Diese Wichtelrunde wurde bereits ausgelost! Wähle unten deinen Namen aus.
             </div>
 
-            <!-- Vorschau der Auslosung (Admin Status) -->
-            <div id="draw-summary" class="hidden bg-slate-900/70 border border-slate-700/60 rounded-2xl p-6 backdrop-blur-md shadow-xl">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-semibold text-lg text-white flex items-center gap-2">
-                        <i class="fa-solid fa-check-circle text-xmas-green"></i> Auslosung erfolgreich abgeschlossen!
-                    </h3>
-                    <button onclick="clearDraw()" class="text-xs text-slate-400 hover:text-red-400 transition underline">
-                        Ergebnis zurücksetzen
-                    </button>
+            <div class="section reveal-box">
+                <h2>🎁 Dein Wichtelkind ziehen</h2>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">Wähle deinen Namen aus, um geheim zu sehen, wem du etwas schenkst:</p>
+
+                <select id="userSelect" onchange="resetCard()" style="margin-bottom: 15px;">
+                    <option value="">-- Wähle deinen Namen --</option>
+                </select>
+
+                <div id="cardContainer" class="gift-card" onclick="revealTarget()">
+                    <span id="cardInstruction">🔒 Klicke hier, um dein Wichtelkind aufzudecken</span>
+                    <span id="cardResult" class="gift-target hidden"></span>
                 </div>
-                <p class="text-sm text-slate-300 mb-6">
-                    Die Zuordnungen wurden verschlüsselt gespeichert. Du kannst die Ziehung jetzt an alle Teilnehmenden verteilen.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <button onclick="switchTab('tab-reveal')" class="bg-xmas-green hover:bg-xmas-darkgreen text-white px-5 py-2.5 rounded-xl font-medium transition text-sm flex items-center gap-2">
-                        <i class="fa-solid fa-eye"></i> Zur Aufdeck-Station
-                    </button>
+
+                <div id="rulesInfo" style="margin-top: 15px; font-size: 0.85rem; color: #555; text-align: left; background: #f9f9f9; padding: 10px; border-radius: 8px;">
+                    <strong>Regeln für diese Runde:</strong>
+                    <ul style="margin-left: 18px; margin-top: 5px;">
+                        <li id="ruleBudgetDisplay">Budget: Beliebig</li>
+                        <li id="ruleMottoDisplay">Motto: Keins</li>
+                    </ul>
                 </div>
             </div>
+
+            <!-- Link für die WhatsApp-Gruppe -->
+            <div class="section" id="shareSection">
+                <h2>🔗 Link für die Gruppe kopieren</h2>
+                <p style="font-size: 0.85rem; color: #666;">Teile diesen Link in eurer WhatsApp-Gruppe. Jeder kann seinen eigenen Namen auswählen:</p>
+                <button class="btn-share" onclick="copyShareUrl()">📋 Wichtel-Link kopieren</button>
+            </div>
+
+            <button onclick="resetApp()" style="background:transparent; border:none; color:#7f8c8d; text-decoration:underline; width:100%; text-align:center; margin-top:10px; cursor:pointer;">
+                ⚙️ Neue Auslosung erstellen
+            </button>
         </div>
-
-        <!-- TAB 3: ZIEHUNG AUFDECKEN -->
-        <div id="tab-reveal" class="tab-content hidden space-y-6">
-            <div class="bg-slate-900/70 border border-slate-700/60 rounded-2xl p-6 backdrop-blur-md shadow-xl">
-                <h2 class="text-xl font-semibold text-xmas-gold mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-user-secret"></i> Geheime Wichtelkarten
-                </h2>
-                <p class="text-sm text-slate-300 mb-6">
-                    Wähle deinen Namen aus der Liste aus, um zu erfahren, wen du beschenken darfst. Bitte schaue nur deine eigene Karte an! 😉
-                </p>
-
-                <!-- Auswahl wer man ist -->
-                <div class="max-w-md mx-auto mb-8">
-                    <label class="block text-xs font-medium text-slate-400 mb-2 text-center uppercase tracking-wider">Wer bist du?</label>
-                    <select id="reveal-user-select" onchange="renderRevealCard()" class="w-full bg-slate-800 border-2 border-xmas-gold/50 rounded-xl px-4 py-3 text-white text-lg font-medium focus:outline-none focus:border-xmas-gold transition text-center cursor-pointer">
-                        <option value="">-- Bitte wähle deinen Namen --</option>
-                    </select>
-                </div>
-
-                <!-- Wichtel-Karte (Interactive Flip Card) -->
-                <div id="reveal-card-container" class="hidden flex flex-col items-center justify-center">
-                    <div class="w-full max-w-sm h-80 perspective-1000 cursor-pointer" onclick="flipCard()">
-                        <div id="card-inner" class="card-inner w-full h-full relative rounded-2xl shadow-2xl border-2 border-xmas-gold/40">
-                            
-                            <!-- Karte Vorderseite -->
-                            <div class="card-front absolute inset-0 bg-gradient-to-br from-xmas-red to-xmas-darkred rounded-2xl p-6 flex flex-col items-center justify-between text-center border border-white/10">
-                                <div class="text-xmas-gold text-xs tracking-widest uppercase font-semibold">Secret Santa 🎅</div>
-                                <div>
-                                    <i class="fa-solid fa-gift text-6xl text-xmas-gold mb-4 animate-pulse"></i>
-                                    <h3 id="card-front-name" class="text-2xl font-bold text-white mb-1">Hallo!</h3>
-                                    <p class="text-xs text-white/80">Klicke auf die Karte, um dein Wichtelkind aufzudecken</p>
-                                </div>
-                                <div class="text-xs text-xmas-gold/80 italic">Top Secret ✨</div>
-                            </div>
-
-                            <!-- Karte Rückseite (Ergebnis) -->
-                            <div class="card-back absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl p-6 flex flex-col items-center justify-between text-center border-2 border-xmas-gold">
-                                <div class="text-xmas-gold text-xs tracking-widest uppercase font-semibold">Du wichtelst für:</div>
-                                
-                                <div class="my-auto">
-                                    <div class="text-xs text-slate-400 mb-1">Deine gezogene Person</div>
-                                    <div id="card-target-name" class="text-3xl font-festive font-bold text-xmas-gold mb-3 tracking-wide"></div>
-                                    
-                                    <!-- Zusammenfassung der Regeln auf der Karte -->
-                                    <div class="bg-slate-800/80 rounded-xl p-3 border border-slate-700 text-left text-xs space-y-1 text-slate-300 max-w-xs mx-auto">
-                                        <div>💰 <strong>Budget:</strong> <span id="card-rule-budget">-</span></div>
-                                        <div>📅 <strong>Datum:</strong> <span id="card-rule-date">-</span></div>
-                                        <div>💡 <strong>Motto:</strong> <span id="card-rule-motto">-</span></div>
-                                    </div>
-                                </div>
-
-                                <button onclick="event.stopPropagation(); flipCard();" class="text-xs text-slate-400 hover:text-white underline">
-                                    Karte wieder verdecken 🔒
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Einzelnen Text-Code / Einladung kopieren -->
-                    <div class="mt-6 flex gap-3">
-                        <button onclick="copyIndividualSecret()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 px-4 py-2 rounded-xl text-xs flex items-center gap-2 transition">
-                            <i class="fa-solid fa-copy"></i> Nachricht für diese Person kopieren
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Platzhalter wenn kein Name ausgewählt -->
-                <div id="reveal-placeholder" class="text-center py-12 text-slate-500">
-                    <i class="fa-solid fa-hand-pointer text-4xl mb-3 opacity-50"></i>
-                    <p class="text-sm">Wähle oben deinen Namen aus, um deine Karte anzuzeigen.</p>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Message Toast -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white border border-xmas-gold/50 px-5 py-3 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-3">
-        <i id="toast-icon" class="fa-solid fa-circle-info text-xmas-gold"></i>
-        <span id="toast-message" class="text-sm font-medium"></span>
     </div>
 
     <script>
-        // State Management
-        let state = {
-            participants: [
-                { id: '1', name: 'Anna', exclusions: [] },
-                { id: '2', name: 'Ben', exclusions: [] },
-                { id: '3', name: 'Clara', exclusions: [] },
-                { id: '4', name: 'David', exclusions: [] }
-            ],
-            rules: {
-                budget: '15 €',
-                date: '24. Dezember',
-                motto: 'Selbstgemacht oder Lustig'
-            },
-            assignments: null // Map or Object { giverId: receiverId }
-        };
+        let participants = [];
+        let exclusions = [];
+        let currentAssignments = {};
+        let currentRules = {};
 
-        // Load State from LocalStorage
-        function loadState() {
-            const saved = localStorage.getItem('xmas_wichtel_state');
-            if (saved) {
-                try {
-                    state = JSON.parse(saved);
-                } catch(e) {
-                    console.error("Failed to load state", e);
-                }
-            }
-        }
-
-        function saveState() {
-            localStorage.setItem('xmas_wichtel_state', JSON.stringify(state));
-        }
-
-        // Initialize App
-        window.onload = function() {
-            createSnowflakes();
-            loadState();
-            
-            // Sync inputs with rules state
-            document.getElementById('rule-budget').value = state.rules.budget || '';
-            document.getElementById('rule-date').value = state.rules.date || '';
-            document.getElementById('rule-motto').value = state.rules.motto || '';
-
-            // Event Listeners for Rules
-            document.getElementById('rule-budget').addEventListener('input', (e) => { state.rules.budget = e.target.value; saveState(); });
-            document.getElementById('rule-date').addEventListener('input', (e) => { state.rules.date = e.target.value; saveState(); });
-            document.getElementById('rule-motto').addEventListener('input', (e) => { state.rules.motto = e.target.value; saveState(); });
-
-            // Form Listener
-            document.getElementById('add-person-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const input = document.getElementById('person-name');
-                const name = input.value.trim();
-                if (name) {
-                    addParticipant(name);
-                    input.value = '';
-                }
-            });
-
-            renderParticipants();
-            updateDrawUI();
-        };
-
-        // Snow animation
-        function createSnowflakes() {
-            const container = document.getElementById('snow-container');
-            const count = 30;
-            for (let i = 0; i < count; i++) {
+        // Schneefall initialisieren
+        function initSnow() {
+            const snowContainer = document.getElementById('snow');
+            for (let i = 0; i < 25; i++) {
                 const flake = document.createElement('div');
                 flake.className = 'snowflake';
                 flake.innerHTML = '❄';
-                flake.style.left = Math.random() * 100 + '%';
-                flake.style.animationDuration = (Math.random() * 5 + 5) + 's, ' + (Math.random() * 3 + 2) + 's';
-                flake.style.animationDelay = (Math.random() * 5) + 's';
+                flake.style.left = Math.random() * 100 + 'vw';
+                flake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                flake.style.opacity = Math.random();
                 flake.style.fontSize = (Math.random() * 10 + 10) + 'px';
-                container.appendChild(flake);
+                snowContainer.appendChild(flake);
+            }
+        }
+        initSnow();
+
+        // Beim Laden prüfen, ob Daten in der URL liegen
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const dataParam = urlParams.get('wichtel');
+
+            if (dataParam) {
+                try {
+                    const decoded = JSON.parse(atob(decodeURIComponent(dataParam)));
+                    currentAssignments = decoded.a;
+                    currentRules = decoded.r || {};
+                    showShareView(true);
+                } catch (e) {
+                    alert("Der Link ist ungültig oder beschädigt.");
+                }
+            }
+        };
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') addParticipant();
+        }
+
+        function addParticipant() {
+            const input = document.getElementById('nameInput');
+            const name = input.value.trim();
+            if (name && !participants.includes(name)) {
+                participants.push(name);
+                input.value = '';
+                renderParticipants();
+                updateExclusionDropdowns();
             }
         }
 
-        // Tab Switching Logic
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-xmas-red', 'text-white', 'shadow-md');
-                btn.classList.add('text-slate-300', 'hover:text-white', 'hover:bg-slate-800');
-            });
-
-            document.getElementById(tabId).classList.remove('hidden');
-            const activeNav = document.getElementById('nav-' + tabId);
-            activeNav.classList.remove('text-slate-300', 'hover:text-white', 'hover:bg-slate-800');
-            activeNav.classList.add('bg-xmas-red', 'text-white', 'shadow-md');
-
-            if (tabId === 'tab-reveal') {
-                populateRevealSelect();
-            }
-        }
-
-        // Participant Management
-        function addParticipant(name) {
-            if (state.participants.some(p => p.name.toLowerCase() === name.toLowerCase())) {
-                showToast('Dieser Name existiert bereits!', 'warning');
-                return;
-            }
-            const newPerson = {
-                id: Date.now().toString(),
-                name: name,
-                exclusions: []
-            };
-            state.participants.push(newPerson);
-            state.assignments = null; // Reset draw if list changes
-            saveState();
+        function removeParticipant(name) {
+            participants = participants.filter(p => p !== name);
+            exclusions = exclusions.filter(e => e.from !== name && e.to !== name);
             renderParticipants();
-            updateDrawUI();
-            showToast(`${name} wurde hinzugefügt ✨`, 'success');
-        }
-
-        function removeParticipant(id) {
-            state.participants = state.participants.filter(p => p.id !== id);
-            // Remove from exclusions of others
-            state.participants.forEach(p => {
-                p.exclusions = p.exclusions.filter(exId => exId !== id);
-            });
-            state.assignments = null;
-            saveState();
-            renderParticipants();
-            updateDrawUI();
-        }
-
-        function toggleExclusion(personId, targetId) {
-            const person = state.participants.find(p => p.id === personId);
-            if (!person) return;
-
-            if (person.exclusions.includes(targetId)) {
-                person.exclusions = person.exclusions.filter(id => id !== targetId);
-            } else {
-                person.exclusions.push(targetId);
-            }
-            state.assignments = null;
-            saveState();
-            renderParticipants();
-            updateDrawUI();
+            renderExclusions();
         }
 
         function renderParticipants() {
-            const container = document.getElementById('participants-list');
-            const emptyState = document.getElementById('empty-state');
-            const countBadge = document.getElementById('participant-count');
-
-            countBadge.innerText = `${state.participants.length} Personen`;
-
-            if (state.participants.length === 0) {
-                container.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                return;
-            }
-
-            emptyState.classList.add('hidden');
-            container.innerHTML = '';
-
-            state.participants.forEach(person => {
-                const div = document.createElement('div');
-                div.className = 'bg-slate-800/60 border border-slate-700/80 rounded-xl p-4 transition hover:border-slate-600';
-
-                // Other participants for exclusion options
-                const others = state.participants.filter(p => p.id !== person.id);
-
-                let exclusionsHTML = '';
-                if (others.length > 0) {
-                    exclusionsHTML = `
-                        <div class="mt-3 pt-3 border-t border-slate-700/50">
-                            <span class="text-xs font-medium text-slate-400 block mb-2">
-                                <i class="fa-solid fa-ban text-red-400 mr-1"></i> Darf nicht beschenken:
-                            </span>
-                            <div class="flex flex-wrap gap-2">
-                                ${others.map(other => {
-                                    const isExcluded = person.exclusions.includes(other.id);
-                                    return `
-                                        <button onclick="toggleExclusion('${person.id}', '${other.id}')" 
-                                            class="text-xs px-2.5 py-1 rounded-lg border transition flex items-center gap-1 ${
-                                                isExcluded 
-                                                ? 'bg-red-950/60 border-red-500/50 text-red-300' 
-                                                : 'bg-slate-900/40 border-slate-700 text-slate-400 hover:border-slate-500'
-                                            }">
-                                            <i class="fa-solid ${isExcluded ? 'fa-user-xmark' : 'fa-plus'}"></i>
-                                            ${other.name}
-                                        </button>
-                                    `;
-                                }).join('')}
-                            </div>
-                        </div>
-                    `;
-                }
-
-                div.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-full bg-xmas-red/30 border border-xmas-red flex items-center justify-center text-xmas-gold font-bold text-sm">
-                                ${person.name.charAt(0).toUpperCase()}
-                            </div>
-                            <span class="font-medium text-white text-base">${person.name}</span>
-                        </div>
-                        <button onclick="removeParticipant('${person.id}')" class="text-slate-400 hover:text-red-400 p-2 transition" title="Löschen">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                    ${exclusionsHTML}
-                `;
-
-                container.appendChild(div);
-            });
+            const container = document.getElementById('participantTags');
+            container.innerHTML = participants.map(p => `
+                <div class="tag">
+                    ${p}
+                    <span class="remove-btn" onclick="removeParticipant('${p}')">&times;</span>
+                </div>
+            `).join('');
         }
 
-        // Secret Santa Algorithm (Derangements with constraints)
-        function runDraw() {
-            const list = state.participants;
-            
-            if (list.length < 3) {
-                showToast('Mindestens 3 Personen werden für das Wichteln benötigt!', 'warning');
+        function addExclusionRow() {
+            if (participants.length < 2) {
+                alert("Füge zuerst mindestens 2 Personen hinzu!");
+                return;
+            }
+            exclusions.push({ from: '', to: '' });
+            renderExclusions();
+        }
+
+        function renderExclusions() {
+            const container = document.getElementById('exclusionList');
+            container.innerHTML = exclusions.map((exc, index) => `
+                <div class="exclusion-row">
+                    <select onchange="updateExclusion(${index}, 'from', this.value)">
+                        <option value="">Wer?</option>
+                        ${participants.map(p => `<option value="${p}" ${p === exc.from ? 'selected' : ''}>${p}</option>`).join('')}
+                    </select>
+                    <span>darf nicht ziehen:</span>
+                    <select onchange="updateExclusion(${index}, 'to', this.value)">
+                        <option value="">Wen?</option>
+                        ${participants.map(p => `<option value="${p}" ${p === exc.to ? 'selected' : ''}>${p}</option>`).join('')}
+                    </select>
+                    <span class="remove-btn" style="cursor:pointer; color:var(--primary-red);" onclick="removeExclusion(${index})">&times;</span>
+                </div>
+            `).join('');
+        }
+
+        function updateExclusion(index, field, value) {
+            exclusions[index][field] = value;
+        }
+
+        function removeExclusion(index) {
+            exclusions.splice(index, 1);
+            renderExclusions();
+        }
+
+        function updateExclusionDropdowns() {
+            renderExclusions();
+        }
+
+        // Der Wichtel-Ziehung-Algorithmus
+        function generateDraw() {
+            if (participants.length < 3) {
+                alert("Bitte füge mindestens 3 Teilnehmende hinzu!");
                 return;
             }
 
-            // Backtracking solver to handle all constraint variations
-            const givers = [...list];
-            const receivers = [...list];
-            let resultAssignment = null;
+            let success = false;
+            let result = {};
+            let attempts = 0;
 
-            // Try up to 500 randomized attempts for fast solving
-            for (let attempt = 0; attempt < 500; attempt++) {
-                const shuffledReceivers = [...receivers].sort(() => Math.random() - 0.5);
+            while (!success && attempts < 500) {
+                attempts++;
+                let receivers = [...participants];
+                result = {};
                 let valid = true;
-                const tempMap = {};
 
-                for (let i = 0; i < givers.length; i++) {
-                    const giver = givers[i];
-                    const receiver = shuffledReceivers[i];
+                for (let giver of participants) {
+                    let possibleReceivers = receivers.filter(r => {
+                        if (r === giver) return false; // Kein Selbstziehen
+                        // Prüfe Ausschlüsse
+                        let isExcluded = exclusions.some(e => e.from === giver && e.to === r);
+                        return !isExcluded;
+                    });
 
-                    // Check: self-draw or explicitly excluded
-                    if (giver.id === receiver.id || giver.exclusions.includes(receiver.id)) {
+                    if (possibleReceivers.length === 0) {
                         valid = false;
                         break;
                     }
-                    tempMap[giver.id] = receiver.id;
+
+                    let chosen = possibleReceivers[Math.floor(Math.random() * possibleReceivers.length)];
+                    result[giver] = chosen;
+                    receivers = receivers.filter(r => r !== chosen);
                 }
 
-                if (valid) {
-                    resultAssignment = tempMap;
-                    break;
-                }
+                if (valid) success = true;
             }
 
-            const statusMsg = document.getElementById('draw-status-message');
-
-            if (resultAssignment) {
-                state.assignments = resultAssignment;
-                saveState();
-                updateDrawUI();
-                showToast('Auslosung erfolgreich durchgeführt! 🎉', 'success');
-            } else {
-                statusMsg.className = 'mb-6 p-4 rounded-xl text-sm font-medium bg-red-950/80 border border-red-600/60 text-red-200';
-                statusMsg.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2"></i> <strong>Keine gültige Kombination möglich!</strong> Bitte passe die Ausschlüsse/Sperrlisten an.';
-                statusMsg.classList.remove('hidden');
-            }
-        }
-
-        function clearDraw() {
-            state.assignments = null;
-            saveState();
-            updateDrawUI();
-            showToast('Auslosung zurückgesetzt.', 'info');
-        }
-
-        function updateDrawUI() {
-            const statusMsg = document.getElementById('draw-status-message');
-            const summary = document.getElementById('draw-summary');
-
-            if (state.assignments) {
-                statusMsg.className = 'mb-6 p-4 rounded-xl text-sm font-medium bg-green-950/80 border border-green-600/60 text-green-200';
-                statusMsg.innerHTML = '<i class="fa-solid fa-circle-check mr-2"></i> Die Auslosung steht fest!';
-                statusMsg.classList.remove('hidden');
-                summary.classList.remove('hidden');
-            } else {
-                statusMsg.classList.add('hidden');
-                summary.classList.add('hidden');
-            }
-        }
-
-        // Reveal Section Logic
-        function populateRevealSelect() {
-            const select = document.getElementById('reveal-user-select');
-            select.innerHTML = '<option value="">-- Bitte wähle deinen Namen --</option>';
-
-            if (!state.assignments) {
-                showToast('Es wurde noch keine Auslosung durchgeführt!', 'warning');
+            if (!success) {
+                alert("Mit diesen Ausschlussregeln ist keine gültige Ziehung möglich. Bitte lockere die Regeln etwas!");
                 return;
             }
 
-            state.participants.forEach(p => {
+            currentAssignments = result;
+            currentRules = {
+                b: document.getElementById('budgetInput').value || 'Nicht festgelegt',
+                m: document.getElementById('mottoInput').value || 'Kein Motto'
+            };
+
+            showShareView(false);
+        }
+
+        function showShareView(isFromSharedLink) {
+            document.getElementById('adminView').classList.add('hidden');
+            document.getElementById('shareView').classList.remove('hidden');
+
+            if (isFromSharedLink) {
+                document.getElementById('sharedBanner').classList.remove('hidden');
+            }
+
+            // Personen-Dropdown füllen
+            const select = document.getElementById('userSelect');
+            select.innerHTML = '<option value="">-- Wähle deinen Namen --</option>';
+            Object.keys(currentAssignments).sort().forEach(person => {
                 const opt = document.createElement('option');
-                opt.value = p.id;
-                opt.textContent = p.name;
+                opt.value = person;
+                opt.textContent = person;
                 select.appendChild(opt);
+            });
+
+            // Regeln anzeigen
+            document.getElementById('ruleBudgetDisplay').textContent = 'Budget: ' + (currentRules.b ? currentRules.b + ' €' : 'Beliebig');
+            document.getElementById('ruleMottoDisplay').textContent = 'Motto: ' + (currentRules.m || 'Keins');
+        }
+
+        function revealTarget() {
+            const select = document.getElementById('userSelect');
+            const name = select.value;
+
+            if (!name) {
+                alert("Bitte wähle zuerst deinen Namen aus der Liste aus!");
+                return;
+            }
+
+            const target = currentAssignments[name];
+            const card = document.getElementById('cardContainer');
+            const instruction = document.getElementById('cardInstruction');
+            const result = document.getElementById('cardResult');
+
+            instruction.classList.add('hidden');
+            result.classList.remove('hidden');
+            result.textContent = "🎁 Du beschenkst: " + target;
+            card.classList.add('revealed');
+        }
+
+        function resetCard() {
+            const card = document.getElementById('cardContainer');
+            const instruction = document.getElementById('cardInstruction');
+            const result = document.getElementById('cardResult');
+
+            instruction.classList.remove('hidden');
+            result.classList.add('hidden');
+            card.classList.remove('revealed');
+        }
+
+        function copyShareUrl() {
+            const payload = {
+                a: currentAssignments,
+                r: currentRules
+            };
+            const encoded = encodeURIComponent(btoa(JSON.stringify(payload)));
+            const shareUrl = window.location.origin + window.location.pathname + '?wichtel=' + encoded;
+
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert("🔗 Der Wichtel-Link wurde in deine Zwischenablage kopiert! Du kannst ihn jetzt direkt bei WhatsApp einfügen.");
+            }).catch(() => {
+                prompt("Kopiere diesen Link manuell:", shareUrl);
             });
         }
 
-        function renderRevealCard() {
-            const select = document.getElementById('reveal-user-select');
-            const giverId = select.value;
-            const container = document.getElementById('reveal-card-container');
-            const placeholder = document.getElementById('reveal-placeholder');
-            const cardInner = document.getElementById('card-inner');
-
-            // Always unflip card when selecting new person
-            cardInner.classList.remove('flipped');
-
-            if (!giverId || !state.assignments) {
-                container.classList.add('hidden');
-                placeholder.classList.remove('hidden');
-                return;
+        function resetApp() {
+            if (confirm("Möchtest du wirklich eine neue Wichtelrunde starten?")) {
+                window.location.href = window.location.origin + window.location.pathname;
             }
-
-            const giver = state.participants.find(p => p.id === giverId);
-            const receiverId = state.assignments[giverId];
-            const receiver = state.participants.find(p => p.id === receiverId);
-
-            if (giver && receiver) {
-                document.getElementById('card-front-name').innerText = `Hallo, ${giver.name}!`;
-                document.getElementById('card-target-name').innerText = receiver.name;
-                
-                document.getElementById('card-rule-budget').innerText = state.rules.budget || 'Nicht festgelegt';
-                document.getElementById('card-rule-date').innerText = state.rules.date || 'Nicht festgelegt';
-                document.getElementById('card-rule-motto').innerText = state.rules.motto || 'Keins';
-
-                placeholder.classList.add('hidden');
-                container.classList.remove('hidden');
-            }
-        }
-
-        function flipCard() {
-            const cardInner = document.getElementById('card-inner');
-            cardInner.classList.toggle('flipped');
-        }
-
-        function copyIndividualSecret() {
-            const select = document.getElementById('reveal-user-select');
-            const giverId = select.value;
-
-            if (!giverId || !state.assignments) return;
-
-            const giver = state.participants.find(p => p.id === giverId);
-            const receiverId = state.assignments[giverId];
-            const receiver = state.participants.find(p => p.id === receiverId);
-
-            const text = `🎅 Hallo ${giver.name}! Beim Weihnachts-Wichteln ziehst du: ${receiver.name} 🎁\n\n💰 Budget: ${state.rules.budget}\n📅 Datum: ${state.rules.date}\n💡 Motto: ${state.rules.motto}`;
-
-            // Copy helper
-            const tempInput = document.createElement('textarea');
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-
-            showToast(`Nachricht für ${giver.name} kopiert!`, 'success');
-        }
-
-        // Toast Helper
-        function showToast(msg, type = 'info') {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-message');
-            const toastIcon = document.getElementById('toast-icon');
-
-            toastMsg.innerText = msg;
-
-            if (type === 'success') {
-                toastIcon.className = 'fa-solid fa-circle-check text-green-400';
-            } else if (type === 'warning') {
-                toastIcon.className = 'fa-solid fa-triangle-exclamation text-amber-400';
-            } else {
-                toastIcon.className = 'fa-solid fa-circle-info text-xmas-gold';
-            }
-
-            toast.classList.remove('opacity-0', 'pointer-events-none');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'pointer-events-none');
-            }, 3000);
         }
     </script>
 </body>
